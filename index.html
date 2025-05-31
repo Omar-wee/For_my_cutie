@@ -338,7 +338,7 @@
 <body>
     <div class="game-container">
         <div class="game-header">
-            <div class="game-title">🧩 Table Code Puzzle</div>
+            <div class="game-title">Table Code Puzzle for my cutie 💗</div>
             <div class="level-indicator">Level <span id="current-level">1</span> of 7</div>
             <div class="stars" id="stars">⭐⭐⭐⭐⭐⭐⭐</div>
         </div>
@@ -399,7 +399,7 @@
     <div class="success-screen" id="success-screen">
         <div class="success-content">
             <div class="success-emoji" id="success-emoji">🎉</div>
-            <div class="success-title" id="success-title">Great Job!</div>
+            <div class="success-title" id="success-title">Great Job Sweetie!</div>
             <div class="success-message" id="success-message">You found the right piece!</div>
             <button class="game-button" onclick="nextLevel()">Next Level →</button>
         </div>
@@ -424,7 +424,7 @@
             },
             {
                 instruction: "Good! Now let's add a title on top.<br>Find the word for table title!",
-                helper: "Caption means 'title' - like a name tag for your table",
+                helper: "Caption means 'title' - like a name for your table",
                 pieces: ["title", "caption", "name", "header"],
                 correct: ["caption"],
                 codeTemplate: [
@@ -450,8 +450,8 @@
                 ]
             },
             {
-                instruction: "Great! In the first row, we need a BIG title.<br>Find the tag for header (bold text)!",
-                helper: "TH = Table Header (makes text bold and important)",
+                instruction: "Great! In the first row, we need a BIG title.<br>Find the tag for header",
+                helper: "TH = Table Header (makes text important and make computer understand that it's the header)",
                 pieces: ["td", "th", "bold", "title"],
                 correct: ["th"],
                 codeTemplate: [
@@ -465,7 +465,7 @@
                 ]
             },
             {
-                instruction: "Now for normal data (not bold).<br>Find the tag for regular table data!",
+                instruction: "Now for normal data.<br>Find the tag for regular table data!",
                 helper: "TD = Table Data (normal text in your table)",
                 pieces: ["data", "td", "text", "th"],
                 correct: ["td"],
@@ -627,12 +627,12 @@
         function showSuccess() {
             const successScreen = document.getElementById('success-screen');
             const messages = [
-                { emoji: '🎉', title: 'Great Job!', message: 'You found the right piece!' },
+                { emoji: '🎉', title: 'Great Job, Sweetie!', message: 'You found the right piece!' },
                 { emoji: '🌟', title: 'Awesome!', message: 'You\'re learning fast!' },
-                { emoji: '🚀', title: 'Super!', message: 'You\'re a coding star!' },
-                { emoji: '💪', title: 'Strong Work!', message: 'Keep going!' },
+                { emoji: '🚀', title: 'U R Super!', message: 'You\'re a coding star!' },
+                { emoji: '😌', title: 'damn! Strong Work!', message: 'Keep going!' },
                 { emoji: '🎯', title: 'Perfect!', message: 'Right on target!' },
-                { emoji: '🏆', title: 'Champion!', message: 'You\'re doing great!' },
+                { emoji: '🏆', title: 'Hehehee!', message: 'You\'re doing great!' },
                 { emoji: '🎊', title: 'You Did It!', message: 'You made a complete table!' }
             ];
             
