@@ -654,51 +654,69 @@
         }
 
         function showCompleteCode() {
-            const completeCode = `&lt;!DOCTYPE html&gt;
-&lt;<span class="highlight-tag">html</span>&gt;
-&lt;<span class="highlight-tag">head</span>&gt;
-  &lt;<span class="highlight-tag">title</span>&gt;Student Results&lt;/<span class="highlight-tag">title</span>&gt;
-&lt;/<span class="highlight-tag">head</span>&gt;
-&lt;<span class="highlight-tag">body</span>&gt;
+            const codeLines = [
+                '&lt;!DOCTYPE html&gt;',
+                '',
+                '&lt;<span class="highlight-tag">html</span>&gt;',
+                '',
+                '&lt;<span class="highlight-tag">head</span>&gt;',
+                '  &lt;<span class="highlight-tag">title</span>&gt;<span class="highlight-content">Student Results</span>&lt;/<span class="highlight-tag">title</span>&gt;',
+                '&lt;/<span class="highlight-tag">head</span>&gt;',
+                '',
+                '&lt;<span class="highlight-tag">body</span>&gt;',
+                '',
+                '<span class="comment">&lt;!-- Our table starts here --&gt;</span>',
+                '&lt;<span class="highlight-tag">table</span> <span class="highlight-attr">border</span>=<span class="highlight-value">"1"</span>&gt;',
+                '',
+                '  <span class="comment">&lt;!-- Table title --&gt;</span>',
+                '  &lt;<span class="highlight-tag">caption</span>&gt;<span class="highlight-content">Dhaka College</span>&lt;/<span class="highlight-tag">caption</span>&gt;',
+                '  ',
+                '  <span class="comment">&lt;!-- First row - big title --&gt;</span>',
+                '  &lt;<span class="highlight-tag">tr</span>&gt;',
+                '    &lt;<span class="highlight-tag">th</span> <span class="highlight-attr">colspan</span>=<span class="highlight-value">"3"</span>&gt;',
+                '      <span class="highlight-content">H.S.C Result</span>',
+                '    &lt;/<span class="highlight-tag">th</span>&gt;',
+                '  &lt;/<span class="highlight-tag">tr</span>&gt;',
+                '  ',
+                '  <span class="comment">&lt;!-- Second row - headers --&gt;</span>',
+                '  &lt;<span class="highlight-tag">tr</span>&gt;',
+                '    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Roll</span>&lt;/<span class="highlight-tag">th</span>&gt;',
+                '    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Name</span>&lt;/<span class="highlight-tag">th</span>&gt;',
+                '    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">GPA</span>&lt;/<span class="highlight-tag">th</span>&gt;',
+                '  &lt;/<span class="highlight-tag">tr</span>&gt;',
+                '  ',
+                '  <span class="comment">&lt;!-- Student 1 --&gt;</span>',
+                '  &lt;<span class="highlight-tag">tr</span>&gt;',
+                '    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">01</span>&lt;/<span class="highlight-tag">td</span>&gt;',
+                '    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habib</span>&lt;/<span class="highlight-tag">td</span>&gt;',
+                '    &lt;<span class="highlight-tag">td</span> <span class="highlight-attr">rowspan</span>=<span class="highlight-value">"2"</span>&gt;',
+                '      <span class="highlight-content">5.00</span>',
+                '    &lt;/<span class="highlight-tag">td</span>&gt;',
+                '  &lt;/<span class="highlight-tag">tr</span>&gt;',
+                '  ',
+                '  <span class="comment">&lt;!-- Student 2 --&gt;</span>',
+                '  &lt;<span class="highlight-tag">tr</span>&gt;',
+                '    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">02</span>&lt;/<span class="highlight-tag">td</span>&gt;',
+                '    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habiba</span>&lt;/<span class="highlight-tag">td</span>&gt;',
+                '    <span class="comment">&lt;!-- No GPA here! --&gt;</span>',
+                '  &lt;/<span class="highlight-tag">tr</span>&gt;',
+                '  ',
+                '&lt;/<span class="highlight-tag">table</span>&gt;',
+                '',
+                '&lt;/<span class="highlight-tag">body</span>&gt;',
+                '',
+                '&lt;/<span class="highlight-tag">html</span>&gt;'
+            ];
 
-<span class="comment">&lt;!-- Our table starts here --&gt;</span>
-&lt;<span class="highlight-tag">table</span> <span class="highlight-attr">border</span>=<span class="highlight-value">"1"</span>&gt;
-
-  <span class="comment">&lt;!-- Table title --&gt;</span>
-  &lt;<span class="highlight-tag">caption</span>&gt;<span class="highlight-content">Dhaka College</span>&lt;/<span class="highlight-tag">caption</span>&gt;
-  
-  <span class="comment">&lt;!-- First row - big title --&gt;</span>
-  &lt;<span class="highlight-tag">tr</span>&gt;
-    &lt;<span class="highlight-tag">th</span> <span class="highlight-attr">colspan</span>=<span class="highlight-value">"3"</span>&gt;<span class="highlight-content">H.S.C Result</span>&lt;/<span class="highlight-tag">th</span>&gt;
-  &lt;/<span class="highlight-tag">tr</span>&gt;
-  
-  <span class="comment">&lt;!-- Second row - headers --&gt;</span>
-  &lt;<span class="highlight-tag">tr</span>&gt;
-    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Roll</span>&lt;/<span class="highlight-tag">th</span>&gt;
-    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Name</span>&lt;/<span class="highlight-tag">th</span>&gt;
-    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">GPA</span>&lt;/<span class="highlight-tag">th</span>&gt;
-  &lt;/<span class="highlight-tag">tr</span>&gt;
-  
-  <span class="comment">&lt;!-- Student 1 --&gt;</span>
-  &lt;<span class="highlight-tag">tr</span>&gt;
-    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">01</span>&lt;/<span class="highlight-tag">td</span>&gt;
-    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habib</span>&lt;/<span class="highlight-tag">td</span>&gt;
-    &lt;<span class="highlight-tag">td</span> <span class="highlight-attr">rowspan</span>=<span class="highlight-value">"2"</span>&gt;<span class="highlight-content">5.00</span>&lt;/<span class="highlight-tag">td</span>&gt;
-  &lt;/<span class="highlight-tag">tr</span>&gt;
-  
-  <span class="comment">&lt;!-- Student 2 --&gt;</span>
-  &lt;<span class="highlight-tag">tr</span>&gt;
-    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">02</span>&lt;/<span class="highlight-tag">td</span>&gt;
-    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habiba</span>&lt;/<span class="highlight-tag">td</span>&gt;
-    <span class="comment">&lt;!-- No GPA here - using the tall box from above! --&gt;</span>
-  &lt;/<span class="highlight-tag">tr</span>&gt;
-  
-&lt;/<span class="highlight-tag">table</span>&gt;
-
-&lt;/<span class="highlight-tag">body</span>&gt;
-&lt;/<span class="highlight-tag">html</span>&gt;`;
-
-            document.getElementById('code-display').innerHTML = `<div class="code-line">${completeCode}</div>`;
+            const codeDisplay = document.getElementById('code-display');
+            codeDisplay.innerHTML = codeLines.map(line => {
+                let indentClass = '';
+                if (line.startsWith('      ')) indentClass = 'indent-3';
+                else if (line.startsWith('    ')) indentClass = 'indent-2';
+                else if (line.startsWith('  ')) indentClass = 'indent-1';
+                
+                return `<div class="code-line ${indentClass}">${line}</div>`;
+            }).join('');
         }
 
         // Initialize game
