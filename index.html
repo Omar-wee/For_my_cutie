@@ -4,249 +4,375 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Learn HTML Tables - Interactive Tutorial</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Table Puzzle Game</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
             color: #333;
+            font-size: 18px;
         }
 
-        .container {
-            max-width: 428px;
-            margin: 0 auto;
+        .game-container {
+            width: 100%;
+            min-height: 100vh;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        header {
+        /* Header */
+        .game-header {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 700;
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        .subtitle {
+        .level-indicator {
             font-size: 16px;
             opacity: 0.9;
         }
 
-        .content {
-            padding: 20px;
-        }
-
-        .section {
-            margin-bottom: 30px;
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 20px;
-            border: 2px solid #e5e7eb;
-        }
-
-        .section-title {
+        .stars {
+            margin-top: 10px;
             font-size: 20px;
-            color: #6366f1;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .icon {
-            width: 30px;
-            height: 30px;
-            background: #6366f1;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-
-        /* Actual table styling */
-        .result-table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .result-table caption {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #6366f1;
-            text-align: center;
-        }
-
-        .result-table th, .result-table td {
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            text-align: center;
-        }
-
-        .result-table th {
-            background: #6366f1;
-            color: white;
-            font-weight: 600;
-        }
-
-        .result-table tr:nth-child(even) {
-            background: #f3f4f6;
-        }
-
-        .result-table tr:hover {
-            background: #e5e7eb;
-            transition: background 0.3s;
-        }
-
-        /* Code display */
-        .code-block {
-            background: #1e293b;
-            color: #e2e8f0;
+        /* Game Area */
+        .game-area {
+            flex: 1;
             padding: 20px;
-            border-radius: 12px;
-            overflow-x: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Instruction Box */
+        .instruction-box {
+            background: #fef3c7;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 3px solid #f59e0b;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .instruction-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #92400e;
+            line-height: 1.4;
+        }
+
+        /* Code Display Area */
+        .code-display {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 20px;
             font-family: 'Courier New', monospace;
+            color: #e2e8f0;
             font-size: 14px;
-            line-height: 1.6;
-            margin: 15px 0;
+            line-height: 1.8;
+            overflow-x: auto;
+            min-height: 200px;
             position: relative;
         }
 
-        .highlight {
-            background: #fbbf24;
-            color: #1e293b;
-            padding: 2px 6px;
-            border-radius: 4px;
+        .code-line {
+            margin: 5px 0;
+            padding: 3px 0;
+        }
+
+        .indent-1 { margin-left: 20px; }
+        .indent-2 { margin-left: 40px; }
+        .indent-3 { margin-left: 60px; }
+
+        .highlight-tag {
+            color: #60a5fa;
             font-weight: bold;
-            animation: pulse 2s infinite;
+        }
+
+        .highlight-attr {
+            color: #fbbf24;
+        }
+
+        .highlight-value {
+            color: #86efac;
+        }
+
+        .highlight-content {
+            color: #fca5a5;
+        }
+
+        .comment {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .code-placeholder {
+            background: #334155;
+            color: #cbd5e1;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 2px;
+            border: 2px dashed #60a5fa;
+            animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            50% { opacity: 0.5; }
         }
 
-        .explanation {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
+        /* Puzzle Pieces */
+        .puzzle-area {
+            background: #f3f4f6;
+            border-radius: 15px;
             padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 15px;
-            line-height: 1.6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-height: 100px;
         }
 
-        .interactive-btn {
+        .puzzle-piece {
+            background: white;
+            border: 2px solid #6366f1;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #1e293b;
+            user-select: none;
+        }
+
+        .puzzle-piece:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .puzzle-piece.used {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .puzzle-piece.correct {
+            background: #86efac;
+            border-color: #22c55e;
+            animation: correctAnimation 0.5s;
+        }
+
+        @keyframes correctAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Preview Table */
+        .preview-area {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .preview-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #6366f1;
+            margin-bottom: 15px;
+        }
+
+        .preview-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        .preview-table caption {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #6366f1;
+        }
+
+        .preview-table th, .preview-table td {
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .preview-table th {
             background: #6366f1;
+            color: white;
+            font-weight: 600;
+        }
+
+        .preview-table tr:nth-child(even) {
+            background: #f3f4f6;
+        }
+
+        /* Button */
+        .game-button {
+            background: #22c55e;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
-        }
-
-        .interactive-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-        }
-
-        .step {
-            background: white;
-            border: 2px solid #e5e7eb;
+            padding: 15px 30px;
             border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
             transition: all 0.3s;
         }
 
-        .step.active {
-            border-color: #6366f1;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        .game-button:active {
+            transform: scale(0.95);
         }
 
-        .step-number {
-            background: #6366f1;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: inline-flex;
+        .game-button:disabled {
+            background: #94a3b8;
+            opacity: 0.5;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .table-part {
-            background: #ecfdf5;
-            border: 2px dashed #10b981;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            color: #059669;
-        }
-
-        .hidden {
+            z-index: 1000;
             display: none;
         }
 
-        /* Mobile optimization */
-        @media (max-width: 430px) {
-            .code-block {
-                font-size: 12px;
-                padding: 15px;
-            }
+        .success-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            animation: successPop 0.5s;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-emoji {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            font-size: 18px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Simple english helper */
+        .helper-tip {
+            background: #dbeafe;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #1e40af;
+            text-align: center;
+        }
+
+        .emoji-hint {
+            font-size: 24px;
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📊 Learn HTML Tables</h1>
-            <p class="subtitle">Easy tutorial for beginners!</p>
-        </header>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-title">🧩 Table Code Puzzle</div>
+            <div class="level-indicator">Level <span id="current-level">1</span> of 7</div>
+            <div class="stars" id="stars">⭐⭐⭐⭐⭐⭐⭐</div>
+        </div>
 
-        <div class="content">
-            <!-- What You'll Build Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="icon">🎯</span>
-                    What You'll Build
-                </h2>
-                <p style="margin-bottom: 15px;">You'll create a student results table that looks like this:</p>
-                
-                <!-- The actual rendered table -->
-                <table class="result-table">
+        <div class="game-area">
+            <div class="instruction-box">
+                <p class="instruction-text" id="instruction">
+                    Let's make a table! First, we need a box.<br>
+                    Find the word that makes a table!
+                </p>
+            </div>
+
+            <div class="code-display" id="code-display">
+                <div class="code-line">&lt;<span class="code-placeholder">???</span>&gt;</div>
+                <div class="code-line indent-1">...</div>
+                <div class="code-line">&lt;/<span class="code-placeholder">???</span>&gt;</div>
+            </div>
+
+            <div class="puzzle-area" id="puzzle-area">
+                <!-- Puzzle pieces will be added here -->
+            </div>
+
+            <div class="helper-tip" id="helper">
+                <span class="emoji-hint">💡</span>
+                <span id="helper-text">A table is like a box with many small rooms</span>
+            </div>
+
+            <button class="game-button" id="check-button" onclick="checkAnswer()" disabled>
+                Check Answer ✓
+            </button>
+
+            <div class="preview-area" style="display: none;" id="preview">
+                <div class="preview-title">What we're building:</div>
+                <table class="preview-table">
                     <caption>Dhaka College</caption>
                     <tr>
                         <th colspan="3">H.S.C Result</th>
@@ -267,224 +393,316 @@
                     </tr>
                 </table>
             </div>
+        </div>
+    </div>
 
-            <!-- Understanding Tables Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="icon">💡</span>
-                    What is an HTML Table?
-                </h2>
-                <div class="explanation">
-                    Think of an HTML table like a spreadsheet in Excel or a grid on paper. It has:
-                    <ul style="margin-top: 10px; margin-left: 20px;">
-                        <li>📋 <strong>Rows</strong> - Horizontal lines (left to right)</li>
-                        <li>📊 <strong>Columns</strong> - Vertical lines (up and down)</li>
-                        <li>📝 <strong>Cells</strong> - Boxes where rows and columns meet</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Interactive Learning Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="icon">🎮</span>
-                    Interactive Learning
-                </h2>
-                <button class="interactive-btn" onclick="startTutorial()">Start Step-by-Step Tutorial</button>
-                
-                <div id="tutorial-steps" class="hidden">
-                    <div class="step" id="step1">
-                        <h3><span class="step-number">1</span>Create the Table Container</h3>
-                        <div class="code-block">
-                            &lt;<span class="highlight">table</span> border="1"&gt;<br>
-                            &nbsp;&nbsp;... table content goes here ...<br>
-                            &lt;/<span class="highlight">table</span>&gt;
-                        </div>
-                        <p>The <code>&lt;table&gt;</code> tag is like drawing a box on your page where your table will live.</p>
-                    </div>
-
-                    <div class="step" id="step2">
-                        <h3><span class="step-number">2</span>Add a Title</h3>
-                        <div class="code-block">
-                            &lt;table&gt;<br>
-                            &nbsp;&nbsp;&lt;<span class="highlight">caption</span>&gt;Dhaka College&lt;/caption&gt;<br>
-                            &lt;/table&gt;
-                        </div>
-                        <p>The <code>&lt;caption&gt;</code> is like writing a title above your table.</p>
-                    </div>
-
-                    <div class="step" id="step3">
-                        <h3><span class="step-number">3</span>Create Rows</h3>
-                        <div class="code-block">
-                            &lt;<span class="highlight">tr</span>&gt;<br>
-                            &nbsp;&nbsp;... cells go here ...<br>
-                            &lt;/<span class="highlight">tr</span>&gt;
-                        </div>
-                        <p><code>&lt;tr&gt;</code> means "table row" - it's like drawing a horizontal line in your table.</p>
-                    </div>
-
-                    <div class="step" id="step4">
-                        <h3><span class="step-number">4</span>Add Headers and Data</h3>
-                        <div class="code-block">
-                            &lt;tr&gt;<br>
-                            &nbsp;&nbsp;&lt;<span class="highlight">th</span>&gt;Roll&lt;/th&gt;&nbsp;&nbsp;&lt;!-- Header (bold) --&gt;<br>
-                            &nbsp;&nbsp;&lt;<span class="highlight">td</span>&gt;01&lt;/td&gt;&nbsp;&nbsp;&nbsp;&lt;!-- Regular data --&gt;<br>
-                            &lt;/tr&gt;
-                        </div>
-                        <p><code>&lt;th&gt;</code> = Table Header (bold text)<br>
-                        <code>&lt;td&gt;</code> = Table Data (regular text)</p>
-                    </div>
-
-                    <div class="step" id="step5">
-                        <h3><span class="step-number">5</span>Special Features</h3>
-                        <div class="table-part">colspan="3" → Makes a cell stretch across 3 columns</div>
-                        <div class="table-part">rowspan="2" → Makes a cell stretch down 2 rows</div>
-                        <p style="margin-top: 15px;">These are like merging cells in Excel!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Complete Code Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="icon">📝</span>
-                    Complete Code
-                </h2>
-                <button class="interactive-btn" onclick="toggleCode()">Show/Hide Full Code</button>
-                <div id="full-code" class="hidden">
-                    <div class="code-block">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Student Results&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;!-- Start of the table --&gt;
-&lt;table border="1" cellspacing="0"&gt;
-  
-  &lt;!-- Table title --&gt;
-  &lt;caption&gt;Dhaka College&lt;/caption&gt;
-  
-  &lt;!-- First row - main heading --&gt;
-  &lt;tr&gt;
-    &lt;th colspan="3"&gt;H.S.C Result&lt;/th&gt;
-  &lt;/tr&gt;
-  
-  &lt;!-- Second row - column headers --&gt;
-  &lt;tr&gt;
-    &lt;th&gt;Roll&lt;/th&gt;
-    &lt;th&gt;Name&lt;/th&gt;
-    &lt;th&gt;GPA&lt;/th&gt;
-  &lt;/tr&gt;
-  
-  &lt;!-- Student data rows --&gt;
-  &lt;tr&gt;
-    &lt;td&gt;01&lt;/td&gt;
-    &lt;td&gt;Habib&lt;/td&gt;
-    &lt;td rowspan="2"&gt;5.00&lt;/td&gt;
-  &lt;/tr&gt;
-  
-  &lt;tr&gt;
-    &lt;td&gt;02&lt;/td&gt;
-    &lt;td&gt;Habiba&lt;/td&gt;
-  &lt;/tr&gt;
-  
-&lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-                    </div>
-                </div>
-            </div>
-
-            <!-- Try It Yourself Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="icon">🚀</span>
-                    Ready to Try?
-                </h2>
-                <div class="explanation">
-                    <strong>Next Steps:</strong>
-                    <ol style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
-                        <li>Copy the code above</li>
-                        <li>Open a text editor (like Notes)</li>
-                        <li>Paste the code</li>
-                        <li>Save as "mytable.html"</li>
-                        <li>Open in your browser!</li>
-                    </ol>
-                </div>
-            </div>
+    <div class="success-screen" id="success-screen">
+        <div class="success-content">
+            <div class="success-emoji" id="success-emoji">🎉</div>
+            <div class="success-title" id="success-title">Great Job!</div>
+            <div class="success-message" id="success-message">You found the right piece!</div>
+            <button class="game-button" onclick="nextLevel()">Next Level →</button>
         </div>
     </div>
 
     <script>
-        let currentStep = 0;
-        const totalSteps = 5;
+        let currentLevel = 1;
+        let selectedPieces = [];
+        let levelAnswers = [];
 
-        function startTutorial() {
-            document.getElementById('tutorial-steps').classList.remove('hidden');
-            showStep(1);
+        const levels = [
+            {
+                instruction: "Let's make a table! First, we need a box.<br>Find the word that makes a table!",
+                helper: "A table is like a box with many small rooms",
+                pieces: ["div", "table", "span", "box"],
+                correct: ["table"],
+                codeTemplate: [
+                    '&lt;<placeholder>???</placeholder>&gt;',
+                    '  ...',
+                    '&lt;/<placeholder>???</placeholder>&gt;'
+                ]
+            },
+            {
+                instruction: "Good! Now let's add a title on top.<br>Find the word for table title!",
+                helper: "Caption means 'title' - like a name tag for your table",
+                pieces: ["title", "caption", "name", "header"],
+                correct: ["caption"],
+                codeTemplate: [
+                    '&lt;<span class="highlight-tag">table</span>&gt;',
+                    '  &lt;<placeholder>???</placeholder>&gt;Dhaka College&lt;/<placeholder>???</placeholder>&gt;',
+                    '&lt;/<span class="highlight-tag">table</span>&gt;'
+                ]
+            },
+            {
+                instruction: "Now we need rows (lines that go →)<br>Find the tag that makes a row!",
+                helper: "TR = Table Row (a line in your table)",
+                pieces: ["row", "tr", "line", "td"],
+                correct: ["tr"],
+                codeTemplate: [
+                    '&lt;<span class="highlight-tag">table</span>&gt;',
+                    '  &lt;<span class="highlight-tag">caption</span>&gt;Dhaka College&lt;/<span class="highlight-tag">caption</span>&gt;',
+                    '  ',
+                    '  <span class="comment">&lt;!-- First row --&gt;</span>',
+                    '  &lt;<placeholder>???</placeholder>&gt;',
+                    '    ...',
+                    '  &lt;/<placeholder>???</placeholder>&gt;',
+                    '&lt;/<span class="highlight-tag">table</span>&gt;'
+                ]
+            },
+            {
+                instruction: "Great! In the first row, we need a BIG title.<br>Find the tag for header (bold text)!",
+                helper: "TH = Table Header (makes text bold and important)",
+                pieces: ["td", "th", "bold", "title"],
+                correct: ["th"],
+                codeTemplate: [
+                    '&lt;<span class="highlight-tag">table</span>&gt;',
+                    '  &lt;<span class="highlight-tag">caption</span>&gt;Dhaka College&lt;/<span class="highlight-tag">caption</span>&gt;',
+                    '  ',
+                    '  &lt;<span class="highlight-tag">tr</span>&gt;',
+                    '    &lt;<placeholder>???</placeholder> <span class="highlight-attr">colspan</span>=<span class="highlight-value">"3"</span>&gt;H.S.C Result&lt;/<placeholder>???</placeholder>&gt;',
+                    '  &lt;/<span class="highlight-tag">tr</span>&gt;',
+                    '&lt;/<span class="highlight-tag">table</span>&gt;'
+                ]
+            },
+            {
+                instruction: "Now for normal data (not bold).<br>Find the tag for regular table data!",
+                helper: "TD = Table Data (normal text in your table)",
+                pieces: ["data", "td", "text", "th"],
+                correct: ["td"],
+                codeTemplate: [
+                    '&lt;<span class="highlight-tag">tr</span>&gt;',
+                    '  &lt;<span class="highlight-tag">th</span>&gt;Roll&lt;/<span class="highlight-tag">th</span>&gt;',
+                    '  &lt;<span class="highlight-tag">th</span>&gt;Name&lt;/<span class="highlight-tag">th</span>&gt;',
+                    '  &lt;<span class="highlight-tag">th</span>&gt;GPA&lt;/<span class="highlight-tag">th</span>&gt;',
+                    '&lt;/<span class="highlight-tag">tr</span>&gt;',
+                    '',
+                    '&lt;<span class="highlight-tag">tr</span>&gt;',
+                    '  &lt;<placeholder>???</placeholder>&gt;01&lt;/<placeholder>???</placeholder>&gt;',
+                    '  &lt;<placeholder>???</placeholder>&gt;Habib&lt;/<placeholder>???</placeholder>&gt;',
+                    '&lt;/<span class="highlight-tag">tr</span>&gt;'
+                ]
+            },
+            {
+                instruction: "Special trick! We want one box to be tall (cover 2 rows).<br>Find the word that makes a box tall!",
+                helper: "Rowspan = makes a box stretch down like this ↓",
+                pieces: ["tallspan", "rowspan", "bigbox", "colspan"],
+                correct: ["rowspan"],
+                codeTemplate: [
+                    '&lt;<span class="highlight-tag">tr</span>&gt;',
+                    '  &lt;<span class="highlight-tag">td</span>&gt;01&lt;/<span class="highlight-tag">td</span>&gt;',
+                    '  &lt;<span class="highlight-tag">td</span>&gt;Habib&lt;/<span class="highlight-tag">td</span>&gt;',
+                    '  &lt;<span class="highlight-tag">td</span> <placeholder>???</placeholder>=<span class="highlight-value">"2"</span>&gt;5.00&lt;/<span class="highlight-tag">td</span>&gt;',
+                    '&lt;/<span class="highlight-tag">tr</span>&gt;'
+                ]
+            },
+            {
+                instruction: "Perfect! Let's see the whole table now!<br>Tap to see your complete code!",
+                helper: "You did it! You made a real HTML table! 🎉",
+                pieces: ["Show My Table!"],
+                correct: ["Show My Table!"],
+                codeTemplate: []
+            }
+        ];
+
+        function initLevel() {
+            const level = levels[currentLevel - 1];
             
-            // Smooth scroll to tutorial
-            document.getElementById('tutorial-steps').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'nearest' 
+            // Update UI
+            document.getElementById('instruction').innerHTML = level.instruction;
+            document.getElementById('helper-text').textContent = level.helper;
+            document.getElementById('current-level').textContent = currentLevel;
+            
+            // Update stars
+            let stars = '';
+            for (let i = 1; i <= 7; i++) {
+                stars += i <= currentLevel ? '⭐' : '☆';
+            }
+            document.getElementById('stars').innerHTML = stars;
+            
+            // Show preview after level 3
+            if (currentLevel > 3) {
+                document.getElementById('preview').style.display = 'block';
+            }
+            
+            // Update code display
+            if (currentLevel === 7) {
+                showCompleteCode();
+            } else {
+                updateCodeDisplay(level.codeTemplate);
+            }
+            
+            // Create puzzle pieces
+            createPuzzlePieces(level.pieces);
+            
+            // Reset
+            selectedPieces = [];
+            document.getElementById('check-button').disabled = true;
+        }
+
+        function updateCodeDisplay(template) {
+            const codeDisplay = document.getElementById('code-display');
+            codeDisplay.innerHTML = template.map(line => {
+                // Determine indentation
+                let indentClass = '';
+                if (line.startsWith('    ')) indentClass = 'indent-2';
+                else if (line.startsWith('  ')) indentClass = 'indent-1';
+                
+                // Replace placeholder
+                line = line.replace(/<placeholder>(.*?)<\/placeholder>/g, '<span class="code-placeholder">$1</span>');
+                
+                return `<div class="code-line ${indentClass}">${line}</div>`;
+            }).join('');
+        }
+
+        function createPuzzlePieces(pieces) {
+            const puzzleArea = document.getElementById('puzzle-area');
+            puzzleArea.innerHTML = '';
+            
+            pieces.forEach(piece => {
+                const pieceElement = document.createElement('div');
+                pieceElement.className = 'puzzle-piece';
+                pieceElement.textContent = piece;
+                pieceElement.onclick = () => selectPiece(piece, pieceElement);
+                puzzleArea.appendChild(pieceElement);
             });
         }
 
-        function showStep(stepNumber) {
-            // Hide all steps
-            for (let i = 1; i <= totalSteps; i++) {
-                document.getElementById(`step${i}`).classList.remove('active');
+        function selectPiece(piece, element) {
+            if (currentLevel === 7) {
+                showCompleteCode();
+                showSuccess();
+                return;
             }
             
-            // Show current step with animation
-            setTimeout(() => {
-                document.getElementById(`step${stepNumber}`).classList.add('active');
-            }, 100);
+            // Replace placeholders
+            const placeholders = document.querySelectorAll('.code-placeholder');
+            placeholders.forEach(placeholder => {
+                if (placeholder.textContent === '???') {
+                    placeholder.textContent = piece;
+                    placeholder.style.background = '#60a5fa';
+                    placeholder.style.border = '2px solid #3b82f6';
+                }
+            });
             
-            currentStep = stepNumber;
-            
-            // Auto-advance to next step after 5 seconds
-            if (currentStep < totalSteps) {
-                setTimeout(() => {
-                    showStep(currentStep + 1);
-                }, 5000);
-            }
+            selectedPieces = [piece];
+            element.classList.add('used');
+            document.getElementById('check-button').disabled = false;
         }
 
-        function toggleCode() {
-            const codeBlock = document.getElementById('full-code');
-            codeBlock.classList.toggle('hidden');
+        function checkAnswer() {
+            const level = levels[currentLevel - 1];
+            const isCorrect = selectedPieces.every(piece => level.correct.includes(piece));
             
-            if (!codeBlock.classList.contains('hidden')) {
-                codeBlock.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'nearest' 
+            if (isCorrect) {
+                // Animate correct pieces
+                document.querySelectorAll('.puzzle-piece.used').forEach(piece => {
+                    piece.classList.add('correct');
                 });
+                
+                setTimeout(() => {
+                    showSuccess();
+                }, 500);
+            } else {
+                // Wrong answer animation
+                document.querySelectorAll('.code-placeholder').forEach(placeholder => {
+                    if (placeholder.textContent !== '???') {
+                        placeholder.style.background = '#ef4444';
+                        setTimeout(() => {
+                            placeholder.style.background = '#334155';
+                            placeholder.textContent = '???';
+                        }, 1000);
+                    }
+                });
+                
+                // Reset pieces
+                document.querySelectorAll('.puzzle-piece').forEach(piece => {
+                    piece.classList.remove('used');
+                });
+                
+                selectedPieces = [];
+                document.getElementById('check-button').disabled = true;
             }
         }
 
-        // Add touch feedback for mobile
-        document.querySelectorAll('.interactive-btn').forEach(btn => {
-            btn.addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.95)';
-            });
+        function showSuccess() {
+            const successScreen = document.getElementById('success-screen');
+            const messages = [
+                { emoji: '🎉', title: 'Great Job!', message: 'You found the right piece!' },
+                { emoji: '🌟', title: 'Awesome!', message: 'You\'re learning fast!' },
+                { emoji: '🚀', title: 'Super!', message: 'You\'re a coding star!' },
+                { emoji: '💪', title: 'Strong Work!', message: 'Keep going!' },
+                { emoji: '🎯', title: 'Perfect!', message: 'Right on target!' },
+                { emoji: '🏆', title: 'Champion!', message: 'You\'re doing great!' },
+                { emoji: '🎊', title: 'You Did It!', message: 'You made a complete table!' }
+            ];
             
-            btn.addEventListener('touchend', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
+            const msg = messages[currentLevel - 1];
+            document.getElementById('success-emoji').textContent = msg.emoji;
+            document.getElementById('success-title').textContent = msg.title;
+            document.getElementById('success-message').textContent = msg.message;
+            
+            successScreen.style.display = 'flex';
+        }
 
-        // Highlight table parts on tap
-        document.querySelector('.result-table').addEventListener('click', function(e) {
-            const target = e.target;
-            if (target.tagName === 'TD' || target.tagName === 'TH') {
-                target.style.background = '#fbbf24';
-                setTimeout(() => {
-                    target.style.background = '';
-                }, 1000);
+        function nextLevel() {
+            document.getElementById('success-screen').style.display = 'none';
+            currentLevel++;
+            
+            if (currentLevel <= 7) {
+                initLevel();
             }
-        });
+        }
+
+        function showCompleteCode() {
+            const completeCode = `&lt;!DOCTYPE html&gt;
+&lt;<span class="highlight-tag">html</span>&gt;
+&lt;<span class="highlight-tag">head</span>&gt;
+  &lt;<span class="highlight-tag">title</span>&gt;Student Results&lt;/<span class="highlight-tag">title</span>&gt;
+&lt;/<span class="highlight-tag">head</span>&gt;
+&lt;<span class="highlight-tag">body</span>&gt;
+
+<span class="comment">&lt;!-- Our table starts here --&gt;</span>
+&lt;<span class="highlight-tag">table</span> <span class="highlight-attr">border</span>=<span class="highlight-value">"1"</span>&gt;
+
+  <span class="comment">&lt;!-- Table title --&gt;</span>
+  &lt;<span class="highlight-tag">caption</span>&gt;<span class="highlight-content">Dhaka College</span>&lt;/<span class="highlight-tag">caption</span>&gt;
+  
+  <span class="comment">&lt;!-- First row - big title --&gt;</span>
+  &lt;<span class="highlight-tag">tr</span>&gt;
+    &lt;<span class="highlight-tag">th</span> <span class="highlight-attr">colspan</span>=<span class="highlight-value">"3"</span>&gt;<span class="highlight-content">H.S.C Result</span>&lt;/<span class="highlight-tag">th</span>&gt;
+  &lt;/<span class="highlight-tag">tr</span>&gt;
+  
+  <span class="comment">&lt;!-- Second row - headers --&gt;</span>
+  &lt;<span class="highlight-tag">tr</span>&gt;
+    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Roll</span>&lt;/<span class="highlight-tag">th</span>&gt;
+    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">Name</span>&lt;/<span class="highlight-tag">th</span>&gt;
+    &lt;<span class="highlight-tag">th</span>&gt;<span class="highlight-content">GPA</span>&lt;/<span class="highlight-tag">th</span>&gt;
+  &lt;/<span class="highlight-tag">tr</span>&gt;
+  
+  <span class="comment">&lt;!-- Student 1 --&gt;</span>
+  &lt;<span class="highlight-tag">tr</span>&gt;
+    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">01</span>&lt;/<span class="highlight-tag">td</span>&gt;
+    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habib</span>&lt;/<span class="highlight-tag">td</span>&gt;
+    &lt;<span class="highlight-tag">td</span> <span class="highlight-attr">rowspan</span>=<span class="highlight-value">"2"</span>&gt;<span class="highlight-content">5.00</span>&lt;/<span class="highlight-tag">td</span>&gt;
+  &lt;/<span class="highlight-tag">tr</span>&gt;
+  
+  <span class="comment">&lt;!-- Student 2 --&gt;</span>
+  &lt;<span class="highlight-tag">tr</span>&gt;
+    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">02</span>&lt;/<span class="highlight-tag">td</span>&gt;
+    &lt;<span class="highlight-tag">td</span>&gt;<span class="highlight-content">Habiba</span>&lt;/<span class="highlight-tag">td</span>&gt;
+    <span class="comment">&lt;!-- No GPA here - using the tall box from above! --&gt;</span>
+  &lt;/<span class="highlight-tag">tr</span>&gt;
+  
+&lt;/<span class="highlight-tag">table</span>&gt;
+
+&lt;/<span class="highlight-tag">body</span>&gt;
+&lt;/<span class="highlight-tag">html</span>&gt;`;
+
+            document.getElementById('code-display').innerHTML = `<div class="code-line">${completeCode}</div>`;
+        }
+
+        // Initialize game
+        initLevel();
     </script>
 </body>
 </html>
