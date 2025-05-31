@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Learn HTML Tables - Interactive Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 428px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #6366f1;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            background: #6366f1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Actual table styling */
+        .result-table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .result-table caption {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #6366f1;
+            text-align: center;
+        }
+
+        .result-table th, .result-table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .result-table th {
+            background: #6366f1;
+            color: white;
+            font-weight: 600;
+        }
+
+        .result-table tr:nth-child(even) {
+            background: #f3f4f6;
+        }
+
+        .result-table tr:hover {
+            background: #e5e7eb;
+            transition: background 0.3s;
+        }
+
+        /* Code display */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .highlight {
+            background: #fbbf24;
+            color: #1e293b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .explanation {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .interactive-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+        }
+
+        .interactive-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+        }
+
+        .step {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .step-number {
+            background: #6366f1;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .table-part {
+            background: #ecfdf5;
+            border: 2px dashed #10b981;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 430px) {
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Learn HTML Tables</h1>
+            <p class="subtitle">Easy tutorial for beginners!</p>
+        </header>
+
+        <div class="content">
+            <!-- What You'll Build Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">🎯</span>
+                    What You'll Build
+                </h2>
+                <p style="margin-bottom: 15px;">You'll create a student results table that looks like this:</p>
+                
+                <!-- The actual rendered table -->
+                <table class="result-table">
+                    <caption>Dhaka College</caption>
+                    <tr>
+                        <th colspan="3">H.S.C Result</th>
+                    </tr>
+                    <tr>
+                        <th>Roll</th>
+                        <th>Name</th>
+                        <th>GPA</th>
+                    </tr>
+                    <tr>
+                        <td>01</td>
+                        <td>Habib</td>
+                        <td rowspan="2">5.00</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Habiba</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Understanding Tables Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">💡</span>
+                    What is an HTML Table?
+                </h2>
+                <div class="explanation">
+                    Think of an HTML table like a spreadsheet in Excel or a grid on paper. It has:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>📋 <strong>Rows</strong> - Horizontal lines (left to right)</li>
+                        <li>📊 <strong>Columns</strong> - Vertical lines (up and down)</li>
+                        <li>📝 <strong>Cells</strong> - Boxes where rows and columns meet</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Learning Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">🎮</span>
+                    Interactive Learning
+                </h2>
+                <button class="interactive-btn" onclick="startTutorial()">Start Step-by-Step Tutorial</button>
+                
+                <div id="tutorial-steps" class="hidden">
+                    <div class="step" id="step1">
+                        <h3><span class="step-number">1</span>Create the Table Container</h3>
+                        <div class="code-block">
+                            &lt;<span class="highlight">table</span> border="1"&gt;<br>
+                            &nbsp;&nbsp;... table content goes here ...<br>
+                            &lt;/<span class="highlight">table</span>&gt;
+                        </div>
+                        <p>The <code>&lt;table&gt;</code> tag is like drawing a box on your page where your table will live.</p>
+                    </div>
+
+                    <div class="step" id="step2">
+                        <h3><span class="step-number">2</span>Add a Title</h3>
+                        <div class="code-block">
+                            &lt;table&gt;<br>
+                            &nbsp;&nbsp;&lt;<span class="highlight">caption</span>&gt;Dhaka College&lt;/caption&gt;<br>
+                            &lt;/table&gt;
+                        </div>
+                        <p>The <code>&lt;caption&gt;</code> is like writing a title above your table.</p>
+                    </div>
+
+                    <div class="step" id="step3">
+                        <h3><span class="step-number">3</span>Create Rows</h3>
+                        <div class="code-block">
+                            &lt;<span class="highlight">tr</span>&gt;<br>
+                            &nbsp;&nbsp;... cells go here ...<br>
+                            &lt;/<span class="highlight">tr</span>&gt;
+                        </div>
+                        <p><code>&lt;tr&gt;</code> means "table row" - it's like drawing a horizontal line in your table.</p>
+                    </div>
+
+                    <div class="step" id="step4">
+                        <h3><span class="step-number">4</span>Add Headers and Data</h3>
+                        <div class="code-block">
+                            &lt;tr&gt;<br>
+                            &nbsp;&nbsp;&lt;<span class="highlight">th</span>&gt;Roll&lt;/th&gt;&nbsp;&nbsp;&lt;!-- Header (bold) --&gt;<br>
+                            &nbsp;&nbsp;&lt;<span class="highlight">td</span>&gt;01&lt;/td&gt;&nbsp;&nbsp;&nbsp;&lt;!-- Regular data --&gt;<br>
+                            &lt;/tr&gt;
+                        </div>
+                        <p><code>&lt;th&gt;</code> = Table Header (bold text)<br>
+                        <code>&lt;td&gt;</code> = Table Data (regular text)</p>
+                    </div>
+
+                    <div class="step" id="step5">
+                        <h3><span class="step-number">5</span>Special Features</h3>
+                        <div class="table-part">colspan="3" → Makes a cell stretch across 3 columns</div>
+                        <div class="table-part">rowspan="2" → Makes a cell stretch down 2 rows</div>
+                        <p style="margin-top: 15px;">These are like merging cells in Excel!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Code Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">📝</span>
+                    Complete Code
+                </h2>
+                <button class="interactive-btn" onclick="toggleCode()">Show/Hide Full Code</button>
+                <div id="full-code" class="hidden">
+                    <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Student Results&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!-- Start of the table --&gt;
+&lt;table border="1" cellspacing="0"&gt;
+  
+  &lt;!-- Table title --&gt;
+  &lt;caption&gt;Dhaka College&lt;/caption&gt;
+  
+  &lt;!-- First row - main heading --&gt;
+  &lt;tr&gt;
+    &lt;th colspan="3"&gt;H.S.C Result&lt;/th&gt;
+  &lt;/tr&gt;
+  
+  &lt;!-- Second row - column headers --&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Roll&lt;/th&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;GPA&lt;/th&gt;
+  &lt;/tr&gt;
+  
+  &lt;!-- Student data rows --&gt;
+  &lt;tr&gt;
+    &lt;td&gt;01&lt;/td&gt;
+    &lt;td&gt;Habib&lt;/td&gt;
+    &lt;td rowspan="2"&gt;5.00&lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td&gt;02&lt;/td&gt;
+    &lt;td&gt;Habiba&lt;/td&gt;
+  &lt;/tr&gt;
+  
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                    </div>
+                </div>
+            </div>
+
+            <!-- Try It Yourself Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">🚀</span>
+                    Ready to Try?
+                </h2>
+                <div class="explanation">
+                    <strong>Next Steps:</strong>
+                    <ol style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+                        <li>Copy the code above</li>
+                        <li>Open a text editor (like Notes)</li>
+                        <li>Paste the code</li>
+                        <li>Save as "mytable.html"</li>
+                        <li>Open in your browser!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 5;
+
+        function startTutorial() {
+            document.getElementById('tutorial-steps').classList.remove('hidden');
+            showStep(1);
+            
+            // Smooth scroll to tutorial
+            document.getElementById('tutorial-steps').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('active');
+            }
+            
+            // Show current step with animation
+            setTimeout(() => {
+                document.getElementById(`step${stepNumber}`).classList.add('active');
+            }, 100);
+            
+            currentStep = stepNumber;
+            
+            // Auto-advance to next step after 5 seconds
+            if (currentStep < totalSteps) {
+                setTimeout(() => {
+                    showStep(currentStep + 1);
+                }, 5000);
+            }
+        }
+
+        function toggleCode() {
+            const codeBlock = document.getElementById('full-code');
+            codeBlock.classList.toggle('hidden');
+            
+            if (!codeBlock.classList.contains('hidden')) {
+                codeBlock.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+            }
+        }
+
+        // Add touch feedback for mobile
+        document.querySelectorAll('.interactive-btn').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Highlight table parts on tap
+        document.querySelector('.result-table').addEventListener('click', function(e) {
+            const target = e.target;
+            if (target.tagName === 'TD' || target.tagName === 'TH') {
+                target.style.background = '#fbbf24';
+                setTimeout(() => {
+                    target.style.background = '';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
